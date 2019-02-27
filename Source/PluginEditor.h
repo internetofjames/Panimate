@@ -47,12 +47,14 @@ private:
     Label positionOffsetLabel;
     
 
-    ToggleButton phaseInvert;
+    TextButton phaseInvert;
     TextButton tempoSync;
     Label speedLabel;
     
     ComboBox LFOtype;
     Label LFOtypeLabel;
+    
+//    enum TempoSyncValues {", };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PanimateAudioProcessorEditor)
 };

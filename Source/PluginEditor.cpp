@@ -101,20 +101,21 @@ PanimateAudioProcessorEditor::PanimateAudioProcessorEditor (PanimateAudioProcess
     
     // Toggle button for phase inversion
     phaseInvert.addListener(this);
-    phaseInvert.setBounds(175, 10, 50, 50);
-    phaseInvert.setButtonText("Phase Invert");
+    phaseInvert.setBounds(200, 25, 25, 25);
+    phaseInvert.setClickingTogglesState(true);
+    phaseInvert.setButtonText(String (CharPointer_UTF8 ("Ø")));
     addAndMakeVisible(phaseInvert);
     
     // Text button for tempo synchronization
     tempoSync.addListener(this);
     tempoSync.setBounds(475, 50, 200, 25);
     tempoSync.setClickingTogglesState(true);
-    tempoSync.setButtonText("Tempo Sync");
+    tempoSync.setButtonText("Tempo Sync : OFF");
     addAndMakeVisible(tempoSync);
     
     speedLabel.setText("Speed", dontSendNotification);
     speedLabel.attachToComponent(&tempoSync, false);
-    speedLabel.setJustificationType(Justification::left);
+    speedLabel.setJustificationType(Justification::centred);
     addAndMakeVisible(speedLabel);
 }
 
@@ -149,13 +150,30 @@ void PanimateAudioProcessorEditor::buttonClicked(Button *button) {
     // change tempo sync button color to show functionality
     if (button == &tempoSync) {
         if (button->getToggleState() == true) {
-            // button is on
+            // tempoSync is toggled on
             button->setColour(TextButton::ColourIds::buttonOnColourId, Colour(255, 255, 0));
-            
+            button->setColour(TextButton::ColourIds::textColourOnId, Colour(0, 0, 0));
+            button->setButtonText("Temp Sync : ON");
         }
         else {
+            // tempoSync is toggled off
             button->setColour(TextButton::ColourIds::buttonColourId, Colour(0, 0, 0));
+            button->setColour(TextButton::ColourIds::textColourOnId, Colour(255, 255, 255));
+            button->setButtonText("Temp Sync : OFF");
         }
+    }
+    if (button == &phaseInvert) {
+        if (button->getToggleState() == true) {
+            // phaseInvert is toggled on
+            button->setColour(TextButton::ColourIds::buttonOnColourId, Colour(255, 255, 0));
+            button->setColour(TextButton::ColourIds::textColourOnId, Colour(0, 0, 0));
+        }
+        else {
+            // phaseInvert is toggled off
+            button->setColour(TextButton::ColourIds::buttonColourId, Colour(0, 0, 0));
+            button->setColour(TextButton::ColourIds::textColourOnId, Colour(255, 255, 255));
+        }
+        
     }
 }
 
