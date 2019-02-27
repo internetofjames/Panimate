@@ -28,8 +28,8 @@ PanimateAudioProcessorEditor::PanimateAudioProcessorEditor (PanimateAudioProcess
     LFOtype.addItem("Square", 2);
     LFOtype.addItem("Triangle", 3);
     LFOtype.addItem("Sawtooth", 4);
+    LFOtype.setSelectedId(1);
     LFOtype.setJustificationType(Justification::centred);
-    LFOtype.
     addAndMakeVisible(LFOtype);
     
     LFOtypeLabel.setText("Pan Type", dontSendNotification);
@@ -108,6 +108,7 @@ PanimateAudioProcessorEditor::PanimateAudioProcessorEditor (PanimateAudioProcess
     // Text button for tempo synchronization
     tempoSync.addListener(this);
     tempoSync.setBounds(475, 50, 200, 25);
+    tempoSync.setClickingTogglesState(true);
     tempoSync.setButtonText("Tempo Sync");
     addAndMakeVisible(tempoSync);
     
@@ -145,7 +146,17 @@ void PanimateAudioProcessorEditor::sliderValueChanged(Slider *slider) {
 
 void PanimateAudioProcessorEditor::buttonClicked(Button *button) {
     
-    
+    // change tempo sync button color to show functionality
+    if (button == &tempoSync) {
+        if (button->getToggleState() == true) {
+            // button is on
+            button->setColour(TextButton::ColourIds::buttonOnColourId, Colour(255, 255, 0));
+            
+        }
+        else {
+            button->setColour(TextButton::ColourIds::buttonColourId, Colour(0, 0, 0));
+        }
+    }
 }
 
 void PanimateAudioProcessorEditor::comboBoxChanged(ComboBox *comboBox) {
