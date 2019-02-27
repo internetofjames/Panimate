@@ -16,7 +16,7 @@
 //==============================================================================
 /**
 */
-class PanimateAudioProcessorEditor  : public AudioProcessorEditor
+class PanimateAudioProcessorEditor  : public AudioProcessorEditor, public Slider::Listener, public Button::Listener, public ComboBox::Listener
 {
 public:
     PanimateAudioProcessorEditor (PanimateAudioProcessor&);
@@ -25,11 +25,34 @@ public:
     //==============================================================================
     void paint (Graphics&) override;
     void resized() override;
+    
+    void sliderValueChanged(Slider* slider) override;
+    void buttonClicked(Button* button) override;
+    void comboBoxChanged(ComboBox* comboBox) override;
 
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     PanimateAudioProcessor& processor;
+    
+    // Panimate interface controls
+    Slider depth;
+    Slider phaseOffset;
+    Slider rate;
+    Slider positionOffset;
+    // Labels for Sliders
+    Label depthLabel;
+    Label phaseOffsetLabel;
+    Label rateLabel;
+    Label positionOffsetLabel;
+    
+
+    ToggleButton phaseInvert;
+    TextButton tempoSync;
+    Label speedLabel;
+    
+    ComboBox LFOtype;
+    Label LFOtypeLabel;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PanimateAudioProcessorEditor)
 };
