@@ -38,12 +38,13 @@ private:
     // Panimate interface controls
     Slider depth;
     Slider phaseOffset;
-    Slider rate;
+    Slider rate;    // rotary slider if tempo sync is off
     Slider positionOffset;
+    
     // Labels for Sliders
     Label depthLabel;
     Label phaseOffsetLabel;
-    Label rateLabel;
+    Label rateLabel;    // for tempo sync = OFF
     Label positionOffsetLabel;
     
 
@@ -53,6 +54,12 @@ private:
     
     ComboBox LFOtype;
     Label LFOtypeLabel;
+    
+    ComboBox rateBars;    // combo box for number of bars if tempo sync is on
+    ComboBox rateBeats;   // combo box for number of beats if tempo sync is on
+    Label barsLabel;    // for tempo sync = ON
+    Label beatsLabel;   // for tempo sync = ON
+
     
 //    enum TempoSyncValues {", };
 

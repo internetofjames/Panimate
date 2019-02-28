@@ -79,10 +79,50 @@ PanimateAudioProcessorEditor::PanimateAudioProcessorEditor (PanimateAudioProcess
     rate.setNumDecimalPlacesToDisplay(3);
     addAndMakeVisible(rate);
     
-    rateLabel.setText("Rate", dontSendNotification);
+    rateLabel.setText("Rate (ms)", dontSendNotification);
     rateLabel.attachToComponent(&rate, false);
     rateLabel.setJustificationType(Justification::centred);
     addAndMakeVisible(rateLabel);
+    
+    // ComboBox for rateBars
+    // not visible by default
+    rateBars.addListener(this);
+    rateBars.setBounds(560, 110, 90, 40);
+    rateBars.addItem("1", 1);
+    rateBars.addItem("2", 2);
+    rateBars.addItem("3", 3);
+    rateBars.addItem("4", 4);
+    rateBars.addItem("5", 5);
+    rateBars.addItem("6", 6);
+    rateBars.addItem("7", 7);
+    rateBars.addItem("8", 8);
+    rateBars.setSelectedId(1);
+    rateBars.setJustificationType(Justification::centred);
+    addChildComponent(&rateBars);
+    
+    barsLabel.setText("Bars:", dontSendNotification);
+    barsLabel.attachToComponent(&rateBars, false);
+    barsLabel.setJustificationType(Justification::centred);
+    addChildComponent(&barsLabel);
+    
+    // ComboBox for rateBeats
+    // not visible by default
+    rateBeats.addListener(this);
+    rateBeats.setBounds(560, 190, 90, 40);
+    rateBeats.addItem("1/2", 1);
+    rateBeats.addItem("1/4", 2);
+    rateBeats.addItem("1/8", 3);
+    rateBeats.addItem("1/16", 4);
+    rateBeats.addItem("1/32", 5);
+    rateBeats.addItem("1/64", 6);
+    rateBeats.setSelectedId(1);
+    rateBeats.setJustificationType(Justification::centred);
+    addChildComponent(&rateBeats);
+    
+    beatsLabel.setText("Beats:", dontSendNotification);
+    beatsLabel.attachToComponent(&rateBeats, false);
+    beatsLabel.setJustificationType(Justification::centred);
+    addChildComponent(&beatsLabel);
     
     // Slider for pan position starting point
     positionOffset.addListener(this);
@@ -154,12 +194,18 @@ void PanimateAudioProcessorEditor::buttonClicked(Button *button) {
             button->setColour(TextButton::ColourIds::buttonOnColourId, Colour(255, 255, 0));
             button->setColour(TextButton::ColourIds::textColourOnId, Colour(0, 0, 0));
             button->setButtonText("Temp Sync : ON");
+            rate.setVisible(false);
+            rateBars.setVisible(true);
+            rateBeats.setVisible(true);
         }
         else {
             // tempoSync is toggled off
             button->setColour(TextButton::ColourIds::buttonColourId, Colour(0, 0, 0));
             button->setColour(TextButton::ColourIds::textColourOnId, Colour(255, 255, 255));
             button->setButtonText("Temp Sync : OFF");
+            rate.setVisible(true);
+            rateBars.setVisible(false);
+            rateBeats.setVisible(false);
         }
     }
     if (button == &phaseInvert) {
