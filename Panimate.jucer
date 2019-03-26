@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="IKeLs7" name="Panimate" projectType="audioplug" jucerVersion="5.4.3"
-              pluginAUMainType="'aufx'" version="0.1.0">
+              pluginAUMainType="'aufx'" version="0.2.0">
   <MAINGROUP id="gzkGew" name="Panimate">
     <GROUP id="{E97845B7-B1C6-4759-AD3B-D6FCECD0A581}" name="Source">
       <FILE id="ahRkxU" name="PluginProcessor.cpp" compile="1" resource="0"
@@ -11,6 +11,8 @@
       <FILE id="fS1yu2" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
       <FILE id="SWeRi6" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+      <FILE id="b4nWbn" name="Panner.cpp" compile="1" resource="0" file="Source/Panner.cpp"/>
+      <FILE id="t0NzAk" name="Panner.h" compile="0" resource="0" file="Source/Panner.h"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>
