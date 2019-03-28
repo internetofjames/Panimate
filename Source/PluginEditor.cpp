@@ -17,7 +17,7 @@ PanimateAudioProcessorEditor::PanimateAudioProcessorEditor (PanimateAudioProcess
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    setSize (700, 400);
+    PanimateAudioProcessorEditor::setResizable(true, true);
     
     // add Panimate interface controls
     
@@ -88,14 +88,15 @@ PanimateAudioProcessorEditor::PanimateAudioProcessorEditor (PanimateAudioProcess
     // not visible by default
     rateBars.addListener(this);
     rateBars.setBounds(560, 110, 90, 40);
-    rateBars.addItem("1", 1);
-    rateBars.addItem("2", 2);
-    rateBars.addItem("3", 3);
-    rateBars.addItem("4", 4);
-    rateBars.addItem("5", 5);
-    rateBars.addItem("6", 6);
-    rateBars.addItem("7", 7);
-    rateBars.addItem("8", 8);
+    rateBars.addItem("0", 1);
+    rateBars.addItem("1", 2);
+    rateBars.addItem("2", 3);
+    rateBars.addItem("3", 4);
+    rateBars.addItem("4", 5);
+    rateBars.addItem("5", 6);
+    rateBars.addItem("6", 7);
+    rateBars.addItem("7", 8);
+    rateBars.addItem("8", 9);
     rateBars.setSelectedId(1);
     rateBars.setJustificationType(Justification::centred);
     addChildComponent(&rateBars);
@@ -115,6 +116,7 @@ PanimateAudioProcessorEditor::PanimateAudioProcessorEditor (PanimateAudioProcess
     rateBeats.addItem("1/16", 4);
     rateBeats.addItem("1/32", 5);
     rateBeats.addItem("1/64", 6);
+    rateBeats.addItem("0", 7);
     rateBeats.setSelectedId(1);
     rateBeats.setJustificationType(Justification::centred);
     addChildComponent(&rateBeats);
@@ -157,6 +159,10 @@ PanimateAudioProcessorEditor::PanimateAudioProcessorEditor (PanimateAudioProcess
     speedLabel.attachToComponent(&tempoSync, false);
     speedLabel.setJustificationType(Justification::centred);
     addAndMakeVisible(speedLabel);
+    
+    PanimateAudioProcessorEditor::setResizeLimits(300, 200, 3500, 2000);
+    setSize (700, 400);
+    
 }
 
 PanimateAudioProcessorEditor::~PanimateAudioProcessorEditor()
@@ -179,6 +185,36 @@ void PanimateAudioProcessorEditor::resized()
 {
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
+    
+    // Uses AffineTransform::scale to properly scale plugin components when window is resized
+    LFOtype.setTransform(AffineTransform::scale(getWidth() / 700.f, getHeight() / 400.f));
+    LFOtypeLabel.setTransform(AffineTransform::scale(getWidth() / 700.f, getHeight() / 400.f));
+    
+    phaseInvert.setTransform(AffineTransform::scale(getWidth() / 700.f, getHeight() / 400.f));
+    
+    depth.setTransform(AffineTransform::scale(getWidth() / 700.f, getHeight() / 400.f));
+    depthLabel.setTransform(AffineTransform::scale(getWidth() / 700.f, getHeight() / 400.f));
+    
+    phaseOffset.setTransform(AffineTransform::scale(getWidth() / 700.f, getHeight() / 400.f));
+    phaseOffsetLabel.setTransform(AffineTransform::scale(getWidth() / 700.f, getHeight() / 400.f));
+    
+    
+    rate.setTransform(AffineTransform::scale(getWidth() / 700.f, getHeight() / 400.f));
+    rateLabel.setTransform(AffineTransform::scale(getWidth() / 700.f, getHeight() / 400.f));
+    
+    rateBars.setTransform(AffineTransform::scale(getWidth() / 700.f, getHeight() / 400.f));
+    barsLabel.setTransform(AffineTransform::scale(getWidth() / 700.f, getHeight() / 400.f));
+    
+    rateBeats.setTransform(AffineTransform::scale(getWidth() / 700.f, getHeight() / 400.f));
+    beatsLabel.setTransform(AffineTransform::scale(getWidth() / 700.f, getHeight() / 400.f));
+    
+    positionOffset.setTransform(AffineTransform::scale(getWidth() / 700.f, getHeight() / 400.f));
+    positionOffsetLabel.setTransform(AffineTransform::scale(getWidth() / 700.f, getHeight() / 400.f));
+    
+    tempoSync.setTransform(AffineTransform::scale(getWidth() / 700.f, getHeight() / 400.f));
+    
+    speedLabel.setTransform(AffineTransform::scale(getWidth() / 700.f, getHeight() / 400.f));
+
 }
 
 void PanimateAudioProcessorEditor::sliderValueChanged(Slider *slider) {
