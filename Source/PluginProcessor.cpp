@@ -97,6 +97,11 @@ void PanimateAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlo
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+    
+    // we need sampleRate, current play position (for consistent autopanning performance)
+    // etc as playback is initiated
+    panner.setFs(sampleRate);
+    
 }
 
 void PanimateAudioProcessor::releaseResources()

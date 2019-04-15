@@ -59,9 +59,33 @@ private:
     ComboBox rateBeats;   // combo box for number of beats if tempo sync is on
     Label barsLabel;    // for tempo sync = ON
     Label beatsLabel;   // for tempo sync = ON
-
     
-//    enum TempoSyncValues {", };
+    // booleans to keep track of plugin feature toggles
+    bool tempoSynced = false;
+    bool phaseInverted = false;
+
+    // maps (associative array) correlating comboBox ID numbers to numerical values
+    std::map<int, int> tempoSyncBarValueMap{
+        {1, 0},
+        {2, 1},
+        {3, 2},
+        {4, 3},
+        {5, 4},
+        {6, 5},
+        {7, 6},
+        {8, 7},
+        {9, 8},
+    };
+    
+    std::map<int, float> tempoSyncBeatValueMap{
+        {1, 0.5f},
+        {2, 0.25f},
+        {3, 0.125f},
+        {4, 0.0625f},
+        {5, 0.03125f},
+        {6, 0.015625f},
+        {7, 0.0f}
+    };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PanimateAudioProcessorEditor)
 };

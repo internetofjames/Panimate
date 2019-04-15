@@ -219,20 +219,41 @@ void PanimateAudioProcessorEditor::resized()
 
 void PanimateAudioProcessorEditor::sliderValueChanged(Slider *slider) {
     
+    // set depth property of panner
+    if (slider == &depth) {
+        processor.panner.setDepth(slider->getValue());
+    }
+    
+    // set phase offset property of panner
+    if (slider == &phaseOffset) {
+        processor.panner.setPhaseOffset(slider->getValue());
+    }
+    
+    // only set rate property of panner from this slider if tempoSync is toggled off
+    if (slider == &rate && tempoSynced == false) {
+        processor.panner.setRate(slider->getValue());
+    }
+    
+    if (slider == &positionOffset) {
+        processor.panner.setPosiitonOffset(slider->getValue());
+    }
+    
 }
 
 void PanimateAudioProcessorEditor::buttonClicked(Button *button) {
     
-    // change tempo sync button color to show functionality
     if (button == &tempoSync) {
         if (button->getToggleState() == true) {
             // tempoSync is toggled on
+            // change tempo sync button color to show functionality
             button->setColour(TextButton::ColourIds::buttonOnColourId, Colour(255, 255, 0));
             button->setColour(TextButton::ColourIds::textColourOnId, Colour(0, 0, 0));
             button->setButtonText("Temp Sync : ON");
             rate.setVisible(false);
             rateBars.setVisible(true);
             rateBeats.setVisible(true);
+            tempoSynced = true;
+            processor.panner.setTempoSynced(true);
         }
         else {
             // tempoSync is toggled off
@@ -242,6 +263,8 @@ void PanimateAudioProcessorEditor::buttonClicked(Button *button) {
             rate.setVisible(true);
             rateBars.setVisible(false);
             rateBeats.setVisible(false);
+            tempoSynced = false;
+            processor.panner.setTempoSynced(false);
         }
     }
     if (button == &phaseInvert) {
@@ -249,16 +272,32 @@ void PanimateAudioProcessorEditor::buttonClicked(Button *button) {
             // phaseInvert is toggled on
             button->setColour(TextButton::ColourIds::buttonOnColourId, Colour(255, 255, 0));
             button->setColour(TextButton::ColourIds::textColourOnId, Colour(0, 0, 0));
+            phaseInverted = true;
+            processor.panner.setPhaseInverted(true);
         }
         else {
             // phaseInvert is toggled off
             button->setColour(TextButton::ColourIds::buttonColourId, Colour(0, 0, 0));
             button->setColour(TextButton::ColourIds::textColourOnId, Colour(255, 255, 255));
+            phaseInverted = false;
+            processor.panner.setPhaseInverted(false);
         }
         
     }
 }
 
 void PanimateAudioProcessorEditor::comboBoxChanged(ComboBox *comboBox) {
+    
+    if (comboBox == &LFOtype) {
+        processor.panner.LFO = (Panner::TypeLFO)comboBox->getSelectedId();
+    }
+    
+    if (comboBox == &rateBars && tempoSynced == true) {
+//        processor.panner
+    }
+    
+    if (comboBox == &rateBeats && tempoSynced == true) {
+        
+    }
     
 }
