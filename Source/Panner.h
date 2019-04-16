@@ -44,7 +44,7 @@ public:
     void setPhaseInverted(bool isInverted);
     bool isPhaseInverted();
     
-    void setStartingAngle(int playbackStartingPositionInSamples);
+    void setCurrentAngle(float currentPlaybackPosition);
     
     void setLFOType(TypeLFO type);
     TypeLFO getLFOType();
@@ -61,7 +61,6 @@ private:
     float positionOffset = 0.0f;
     
     float currentAngle = 0.0f;
-    float angleChange = 0.0f;
     
     bool tempoSynced = false;
     bool phaseInverted = false;
