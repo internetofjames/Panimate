@@ -23,10 +23,10 @@ float Panner::processSample(float x,int channel){
     
     // using panning algorithm from Dr. Eric Tarr, multiply value by lfo according to which channel it is
     float panValue = (lfo / 200) + 0.5f;
-    if (this->channel == 0) {
+    if (channel == 0) {
         y = x * sqrtf(panValue);
     }
-    else if (this->channel == 1) {
+    else if (channel == 1) {
         y = x * sqrtf(1.0f - panValue);
     }
     else {
