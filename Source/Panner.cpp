@@ -21,8 +21,17 @@ float Panner::processSample(float x,int channel){
     
     lfo = getNextSample();
     
-    y = x * lfo;
-    
+    // using panning algorithm from Dr. Eric Tarr, multiply value by lfo according to which channel it is
+    float panValue = (lfo / 200) + 0.5f;
+    if (this->channel == 0) {
+        y = x * sqrtf(panValue);
+    }
+    else if (this->channel == 1) {
+        y = x * sqrtf(1.0f - panValue);
+    }
+    else {
+        y = x; // just in case there's a bug and the two if statements aren't executed
+    }
     return y;
     
 };
@@ -40,12 +49,22 @@ int Panner::getFs(){
     return Fs;
 };
 
+
+// set the starting angle for the LFO upon beginning playback, so that the panning at each sample
+// is consistent, regardless of where playback started
+// i.e., only call this function in prepareToPlay
+void Panner::setStartingAngle(int playbackStartingPositionInSamples) {
+    // while playback position can be returned in seconds, we need integers (like samples) for
+    // the modulus operation
+    currentAngle = ((playbackStartingPositionInSamples % ((int)rate * Fs)) * (1/Fs)) + phaseOffset;
+};
+
 // Set the period of the LFO in milliseconds
 void Panner::setRate(float rateInMilliseconds){
-    rate = rateInMilliseconds;
+    rate = rateInMilliseconds / 1000.0f;
     
-    angleChange = ((1.0f/rateInMilliseconds) * 2.0f * M_PI / (float)Fs) + phaseOffset;
-}
+    angleChange = (rate * 2.0f * M_PI) / (float)Fs;
+};
 
 float Panner::getRate(){
     return rate;
@@ -62,7 +81,7 @@ float Panner::getDepth(){
 
 // Set the phase offset that the LFO will begin at
 void Panner::setPhaseOffset(float phaseOffsetInDegrees){
-    phaseOffset = phaseOffsetInDegrees;
+    phaseOffset = phaseOffsetInDegrees * (M_PI/180); // convert to radians
 };
 
 float Panner::getPhaseOffset(){
@@ -81,7 +100,7 @@ float Panner::getPositionOffset(){
 // Set whether or not the LFO is tempo synced
 void Panner::setTempoSynced(bool isSynced){
     tempoSynced = isSynced;
-}
+};
 
 bool Panner::isTempoSynced(){
     return tempoSynced;
@@ -105,16 +124,16 @@ Panner::TypeLFO Panner::getLFOType(){
 
 // LFO functions
 float Panner::sineFunction(){
-    float out = sinf(currentAngle[channel]);
+    float out = sinf(currentAngle);
     
     updateAngle();
     
     return out;
-}
+};
 
 float Panner::squareFunction(){
     float out;
-    if(currentAngle[channel] < M_PI){
+    if(currentAngle < M_PI){
         out = 1.0f;
     }
     else {
@@ -124,41 +143,41 @@ float Panner::squareFunction(){
     updateAngle();
     
     return out;
-}
+};
 
 
 float Panner::sawtoothFunction(){
-    float out = 2.0f * (currentAngle[channel]/(2.0f*M_PI)) - 1.0f;
+    float out = 2.0f * (currentAngle/(2.0f*M_PI)) - 1.0f;
     
     updateAngle();
     
     return out;
-}
+};
 
 
 float Panner::triangleFunction(){
     float out;
-    if(currentAngle[channel] < M_PI){
-        out = 2.0f * (currentAngle[channel]/(M_PI)) - 1.0f;
+    if(currentAngle < M_PI){
+        out = 2.0f * (currentAngle/(M_PI)) - 1.0f;
     }
     else {
-        float temp = 1.0f - ((currentAngle[channel]-M_PI)/(M_PI));
+        float temp = 1.0f - ((currentAngle-M_PI)/(M_PI));
         out = 2.0f * temp - 1.0f;
     }
     
     updateAngle();
     
     return out;
-}
+};
 
 
 
 void Panner::updateAngle(){
-    currentAngle[channel] += angleChange;
-    if (currentAngle[channel] > 2*M_PI){
-        currentAngle[channel] -= (2*M_PI);
+    currentAngle += angleChange;
+    if (currentAngle > 2*M_PI){
+        currentAngle -= (2*M_PI);
     }
-}
+};
 
 
 float Panner::getNextSample(){
@@ -204,4 +223,4 @@ float Panner::getNextSample(){
     lfo *= phaseInvert;
     
     return lfo;
-}
+};
