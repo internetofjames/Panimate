@@ -44,6 +44,8 @@ public:
     void setPhaseInverted(bool isInverted);
     bool isPhaseInverted();
     
+    void setStartingAngle(int playbackStartingPositionInSamples);
+    
     void setLFOType(TypeLFO type);
     TypeLFO getLFOType();
     
@@ -53,12 +55,12 @@ private:
     int Fs = 48000;
     int channel = 0;
     
-    float rate = 1.0f;
+    float rate = 1.0f; // interpreted as the period of the LFO, in seconds
     float depth = 0.0f;
     float phaseOffset = 0.0f;
     float positionOffset = 0.0f;
     
-    float currentAngle[2] = {0.0f};
+    float currentAngle = 0.0f;
     float angleChange = 0.0f;
     
     bool tempoSynced = false;
