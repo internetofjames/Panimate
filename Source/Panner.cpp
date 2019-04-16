@@ -50,20 +50,17 @@ int Panner::getFs(){
 };
 
 
-// set the starting angle for the LFO upon beginning playback, so that the panning at each sample
+// set the current angle for the LFO based on playback position, so that the panning at each sample
 // is consistent, regardless of where playback started
-// i.e., only call this function in prepareToPlay
-void Panner::setStartingAngle(int playbackStartingPositionInSamples) {
-    // while playback position can be returned in seconds, we need integers (like samples) for
-    // the modulus operation
-    currentAngle = ((playbackStartingPositionInSamples % ((int)rate * Fs)) * (1/Fs)) + phaseOffset;
+void Panner::setCurrentAngle(float currentPlaybackPosition) {
+    currentAngle = ((1/ currentPlaybackPosition * rate) * ((2 * M_PI) / Fs)) + phaseOffset;
 };
 
 // Set the period of the LFO in milliseconds
 void Panner::setRate(float rateInMilliseconds){
     rate = rateInMilliseconds / 1000.0f;
     
-    angleChange = (rate * 2.0f * M_PI) / (float)Fs;
+//    angleChange = (rate * 2.0f * M_PI) / (float)Fs;
 };
 
 float Panner::getRate(){
@@ -173,7 +170,6 @@ float Panner::triangleFunction(){
 
 
 void Panner::updateAngle(){
-    currentAngle += angleChange;
     if (currentAngle > 2*M_PI){
         currentAngle -= (2*M_PI);
     }
