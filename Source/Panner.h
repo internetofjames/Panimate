@@ -35,7 +35,7 @@ public:
     void setPhaseOffset(float phaseOffsetInDegrees);
     float getPhaseOffset();
     
-    void setPosiitonOffset(float panPositionOffset);
+    void setPositonOffset(float panPositionOffset);
     float getPositionOffset();
     
     void setTempoSynced(bool isSynced);

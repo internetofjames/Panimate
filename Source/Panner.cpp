@@ -86,7 +86,7 @@ float Panner::getPhaseOffset(){
 };
 
 // Set the position offset that the panner will begin within the stereo field
-void Panner::setPosiitonOffset(float panPositionOffset){
+void Panner::setPositonOffset(float panPositionOffset){
     positionOffset = panPositionOffset;
 };
 
