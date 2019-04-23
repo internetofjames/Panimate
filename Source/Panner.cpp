@@ -22,7 +22,7 @@ float Panner::processSample(float x,int channel){
     lfo = getNextSample();
     
     // using panning algorithm from Dr. Eric Tarr, multiply value by lfo according to which channel it is
-    float panValue = (lfo / 200) + 0.5f;
+    float panValue = (lfo / 200.f) + 0.5f;
     if (channel == 0) {
         y = x * sqrtf(panValue);
     }

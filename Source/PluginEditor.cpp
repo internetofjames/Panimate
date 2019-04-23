@@ -235,7 +235,7 @@ void PanimateAudioProcessorEditor::sliderValueChanged(Slider *slider) {
     }
     
     if (slider == &positionOffset) {
-        processor.panner.setPosiitonOffset(slider->getValue());
+        processor.panner.setPositonOffset(slider->getValue());
     }
     
 }

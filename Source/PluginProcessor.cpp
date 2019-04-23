@@ -177,9 +177,9 @@ void PanimateAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffe
         
         for (int channel = 0; channel < totalNumInputChannels ; ++channel){
             
-            x = panner.processSample(x,channel);
+            float y = panner.processSample(x,channel);
             
-            buffer.getWritePointer(channel)[sample] = x;
+            buffer.getWritePointer(channel)[sample] = y;
         }
     }
 }
