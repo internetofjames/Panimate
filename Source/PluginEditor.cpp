@@ -97,7 +97,7 @@ PanimateAudioProcessorEditor::PanimateAudioProcessorEditor (PanimateAudioProcess
     rateBars.addItem("6", 7);
     rateBars.addItem("7", 8);
     rateBars.addItem("8", 9);
-    rateBars.setSelectedId(1);
+    rateBars.setSelectedId(2);
     rateBars.setJustificationType(Justification::centred);
     addChildComponent(&rateBars);
     
@@ -117,7 +117,7 @@ PanimateAudioProcessorEditor::PanimateAudioProcessorEditor (PanimateAudioProcess
     rateBeats.addItem("1/32", 5);
     rateBeats.addItem("1/64", 6);
     rateBeats.addItem("0", 7);
-    rateBeats.setSelectedId(1);
+    rateBeats.setSelectedId(7);
     rateBeats.setJustificationType(Justification::centred);
     addChildComponent(&rateBeats);
     
@@ -231,7 +231,8 @@ void PanimateAudioProcessorEditor::sliderValueChanged(Slider *slider) {
     
     // only set rate property of panner from this slider if tempoSync is toggled off
     if (slider == &rate && tempoSynced == false) {
-        processor.panner.setRate(slider->getValue());
+        rateValue = slider->getValue();
+        processor.panner.setRate(rateValue);
     }
     
     if (slider == &positionOffset) {
@@ -254,6 +255,7 @@ void PanimateAudioProcessorEditor::buttonClicked(Button *button) {
             rateBeats.setVisible(true);
             tempoSynced = true;
             processor.panner.setTempoSynced(true);
+            processor.panner.setRate(tempoSyncBarValueMap.at(barValue), tempoSyncBeatValueMap.at(beatValue));
         }
         else {
             // tempoSync is toggled off
@@ -265,6 +267,7 @@ void PanimateAudioProcessorEditor::buttonClicked(Button *button) {
             rateBeats.setVisible(false);
             tempoSynced = false;
             processor.panner.setTempoSynced(false);
+            processor.panner.setRate(rateValue);
         }
     }
     if (button == &phaseInvert) {
@@ -293,11 +296,15 @@ void PanimateAudioProcessorEditor::comboBoxChanged(ComboBox *comboBox) {
     }
     
     if (comboBox == &rateBars && tempoSynced == true) {
-//        processor.panner
+        barValue = rateBars.getSelectedId();
     }
     
     if (comboBox == &rateBeats && tempoSynced == true) {
-        
+        beatValue = rateBeats.getSelectedId();
+    }
+    
+    if (tempoSynced) {
+        processor.panner.setRate(tempoSyncBarValueMap.at(barValue), tempoSyncBeatValueMap.at(beatValue));
     }
     
 }

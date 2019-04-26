@@ -63,7 +63,13 @@ private:
     // booleans to keep track of plugin feature toggles
     bool tempoSynced = false;
     bool phaseInverted = false;
-
+    
+    float rateValue = 1;
+    
+    // ints for bar and beat map lookup values, initialize them to equal upon lookup: 1 bar 0 beats
+    int barValue = 2;
+    int beatValue = 7;
+    
     // maps (associative array) correlating comboBox ID numbers to numerical values
     std::map<int, int> tempoSyncBarValueMap{
         {1, 0},
