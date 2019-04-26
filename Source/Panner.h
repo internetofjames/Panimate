@@ -26,7 +26,15 @@ public:
     void setFs(int sampleRate);
     int getFs();
     
+    void setBPM(float tempo);
+    float getBPM();
+    
+    void setTimeSignature(int numerator, int denominator);
+    int getTimeSigNumerator();
+    int getTimeSigDenominator();
+    
     void setRate(float rateInMilliseconds);
+    void setRate(int numBars, float numBeats);
     float getRate();
     
     void setDepth(float depth);
@@ -56,6 +64,11 @@ private:
     int Fs = 48000;
     int channel = 0;
     
+    float bpm = 120;
+    
+    int timeSigNumerator = 4;
+    int timeSigDenominator = 4;
+    
     float rate = 1.0f; // interpreted as the period of the LFO, in seconds
     float depth = 0.0f;
     float phaseOffset = 0.0f;
@@ -75,6 +88,8 @@ private:
     
     void updateAngle();
     float getNextSample();
+    
+    void setAngleChange(float rate);
     
     float panPosition;
 };

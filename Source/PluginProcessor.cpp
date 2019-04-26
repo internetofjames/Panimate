@@ -144,6 +144,8 @@ void PanimateAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffe
     playHead->getCurrentPosition(currentPositionInfo);
 
     this->panner.setCurrentAngle(currentPositionInfo.timeInSeconds);
+    this->panner.setBPM(currentPositionInfo.bpm);
+    this->panner.setTimeSignature(currentPositionInfo.timeSigNumerator, currentPositionInfo.timeSigDenominator);
     
     // In case we have more outputs than inputs, this code clears any output
     // channels that didn't contain input data, (because these aren't
