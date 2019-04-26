@@ -20,6 +20,7 @@ float Panner::processSample(float x,int channel){
     float lfo;
     
     lfo = getNextSample();
+    panPosition = lfo;
     
     // using panning algorithm from Dr. Eric Tarr, multiply value by lfo according to which channel it is
     float panValue = (lfo / 200.f) + 0.5f;
@@ -53,13 +54,15 @@ int Panner::getFs(){
 // set the current angle for the LFO based on playback position, so that the panning at each sample
 // is consistent, regardless of where playback started
 void Panner::setCurrentAngle(float currentPlaybackPosition) {
-    currentAngle = ((1/ currentPlaybackPosition * rate) * ((2 * M_PI) / Fs)) + phaseOffset;
+//    currentAngle = ((1/ currentPlaybackPosition * rate) * ((2 * M_PI) / Fs)) + phaseOffset;
+    float v = (2 * M_PI) * (1.f / rate) * currentPlaybackPosition + phaseOffset;
+    currentAngle = v - (2 * M_PI) * round(v / (2 * M_PI));
 };
 
 // Set the period of the LFO in milliseconds
 void Panner::setRate(float rateInMilliseconds){
     rate = rateInMilliseconds / 1000.0f;
-    
+    angleChange = (1.f / rate) * (1 / Fs) * (2 * M_PI);
 //    angleChange = (rate * 2.0f * M_PI) / (float)Fs;
 };
 
@@ -170,6 +173,7 @@ float Panner::triangleFunction(){
 
 
 void Panner::updateAngle(){
+    currentAngle += angleChange;
     if (currentAngle > 2*M_PI){
         currentAngle -= (2*M_PI);
     }
@@ -219,4 +223,8 @@ float Panner::getNextSample(){
     lfo *= phaseInvert;
     
     return lfo;
+};
+
+float Panner::getPanPosition(){
+    return panPosition;
 };
