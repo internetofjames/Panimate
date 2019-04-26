@@ -25,7 +25,7 @@ PanimateAudioProcessorEditor::PanimateAudioProcessorEditor (PanimateAudioProcess
     LFOtype.addListener(this);
     LFOtype.setBounds(25, 50, 200, 25);
     LFOtype.addItem("Sine", 1);
-    LFOtype.addItem("Square", 2);
+//    LFOtype.addItem("Square", 2);
     LFOtype.addItem("Triangle", 3);
     LFOtype.addItem("Sawtooth", 4);
     LFOtype.setSelectedId(1);
@@ -75,6 +75,7 @@ PanimateAudioProcessorEditor::PanimateAudioProcessorEditor (PanimateAudioProcess
     rate.setSliderStyle(Slider::RotaryVerticalDrag);
     rate.setRange(0, 10000);
     rate.setValue(0);
+    rate.setSkewFactor(0.35);
     rate.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 50, 15);
     rate.setNumDecimalPlacesToDisplay(3);
     addAndMakeVisible(rate);
@@ -97,7 +98,7 @@ PanimateAudioProcessorEditor::PanimateAudioProcessorEditor (PanimateAudioProcess
     rateBars.addItem("6", 7);
     rateBars.addItem("7", 8);
     rateBars.addItem("8", 9);
-    rateBars.setSelectedId(1);
+    rateBars.setSelectedId(2);
     rateBars.setJustificationType(Justification::centred);
     addChildComponent(&rateBars);
     
@@ -117,7 +118,7 @@ PanimateAudioProcessorEditor::PanimateAudioProcessorEditor (PanimateAudioProcess
     rateBeats.addItem("1/32", 5);
     rateBeats.addItem("1/64", 6);
     rateBeats.addItem("0", 7);
-    rateBeats.setSelectedId(1);
+    rateBeats.setSelectedId(7);
     rateBeats.setJustificationType(Justification::centred);
     addChildComponent(&rateBeats);
     
@@ -176,9 +177,9 @@ void PanimateAudioProcessorEditor::paint (Graphics& g)
     g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
 
     g.setColour (Colours::white);
-    g.setFont (15.0f);
-    g.drawFittedText ("Panimate", getLocalBounds(), Justification::centredTop, 1);
-    g.drawFittedText("Panning visualization graphic to go here in later version...", getLocalBounds(), Justification::centred, 5);
+    g.setFont (30.0f);
+    g.drawFittedText ("Panimate", getLocalBounds(), Justification::centred, 1);
+//    g.drawFittedText("Graphic TBA...", getLocalBounds(), Justification::centred, 5);
 }
 
 void PanimateAudioProcessorEditor::resized()
@@ -231,11 +232,23 @@ void PanimateAudioProcessorEditor::sliderValueChanged(Slider *slider) {
     
     // only set rate property of panner from this slider if tempoSync is toggled off
     if (slider == &rate && tempoSynced == false) {
-        processor.panner.setRate(slider->getValue());
+        rateValue = slider->getValue();
+        processor.panner.setRate(rateValue);
+        
+        // dynamically change decimal place of value that is displayed
+        if (rateValue < 100.f){
+            slider->setNumDecimalPlacesToDisplay(3);
+        }
+        if (rateValue >= 100.f && rateValue < 1000.f){
+            slider->setNumDecimalPlacesToDisplay(2);
+        }
+        if  (rateValue >= 1000.f && rateValue < 10000.f){
+            slider->setNumDecimalPlacesToDisplay(0);
+        }
     }
     
     if (slider == &positionOffset) {
-        processor.panner.setPosiitonOffset(slider->getValue());
+        processor.panner.setPositonOffset(slider->getValue());
     }
     
 }
@@ -254,6 +267,7 @@ void PanimateAudioProcessorEditor::buttonClicked(Button *button) {
             rateBeats.setVisible(true);
             tempoSynced = true;
             processor.panner.setTempoSynced(true);
+            processor.panner.setRate(tempoSyncBarValueMap.at(barValue), tempoSyncBeatValueMap.at(beatValue));
         }
         else {
             // tempoSync is toggled off
@@ -265,6 +279,7 @@ void PanimateAudioProcessorEditor::buttonClicked(Button *button) {
             rateBeats.setVisible(false);
             tempoSynced = false;
             processor.panner.setTempoSynced(false);
+            processor.panner.setRate(rateValue);
         }
     }
     if (button == &phaseInvert) {
@@ -293,11 +308,15 @@ void PanimateAudioProcessorEditor::comboBoxChanged(ComboBox *comboBox) {
     }
     
     if (comboBox == &rateBars && tempoSynced == true) {
-//        processor.panner
+        barValue = rateBars.getSelectedId();
     }
     
     if (comboBox == &rateBeats && tempoSynced == true) {
-        
+        beatValue = rateBeats.getSelectedId();
+    }
+    
+    if (tempoSynced) {
+        processor.panner.setRate(tempoSyncBarValueMap.at(barValue), tempoSyncBeatValueMap.at(beatValue));
     }
     
 }

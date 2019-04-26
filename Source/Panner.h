@@ -26,7 +26,15 @@ public:
     void setFs(int sampleRate);
     int getFs();
     
+    void setBPM(float tempo);
+    float getBPM();
+    
+    void setTimeSignature(int numerator, int denominator);
+    int getTimeSigNumerator();
+    int getTimeSigDenominator();
+    
     void setRate(float rateInMilliseconds);
+    void setRate(int numBars, float numBeats);
     float getRate();
     
     void setDepth(float depth);
@@ -35,7 +43,7 @@ public:
     void setPhaseOffset(float phaseOffsetInDegrees);
     float getPhaseOffset();
     
-    void setPosiitonOffset(float panPositionOffset);
+    void setPositonOffset(float panPositionOffset);
     float getPositionOffset();
     
     void setTempoSynced(bool isSynced);
@@ -48,6 +56,7 @@ public:
     
     void setLFOType(TypeLFO type);
     TypeLFO getLFOType();
+    float getPanPosition();
     
     
 private:
@@ -55,12 +64,18 @@ private:
     int Fs = 48000;
     int channel = 0;
     
+    float bpm = 120;
+    
+    int timeSigNumerator = 4;
+    int timeSigDenominator = 4;
+    
     float rate = 1.0f; // interpreted as the period of the LFO, in seconds
     float depth = 0.0f;
     float phaseOffset = 0.0f;
     float positionOffset = 0.0f;
     
     float currentAngle = 0.0f;
+    float angleChange;
     
     bool tempoSynced = false;
     bool phaseInverted = false;
@@ -74,6 +89,9 @@ private:
     void updateAngle();
     float getNextSample();
     
+    void setAngleChange(float rate);
+    
+    float panPosition;
 };
 
 #endif /* Panner.h */

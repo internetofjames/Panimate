@@ -144,6 +144,8 @@ void PanimateAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffe
     playHead->getCurrentPosition(currentPositionInfo);
 
     this->panner.setCurrentAngle(currentPositionInfo.timeInSeconds);
+    this->panner.setBPM(currentPositionInfo.bpm);
+    this->panner.setTimeSignature(currentPositionInfo.timeSigNumerator, currentPositionInfo.timeSigDenominator);
     
     // In case we have more outputs than inputs, this code clears any output
     // channels that didn't contain input data, (because these aren't
@@ -160,15 +162,26 @@ void PanimateAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffe
     // the samples and the outer loop is handling the channels.
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
+    
+    // Copy the AudioBuffer data into a new object
+    AudioBuffer<float> mono_buffer = AudioBuffer<float>(buffer);
+    
+    // add in the data from any additional channels to the first one and then clear the no longer needed channels
+    for (auto i = 1; i < totalNumInputChannels; ++i) {
+        mono_buffer.addFrom(0, 0, mono_buffer, i, 0, mono_buffer.getNumSamples());
+        mono_buffer.clear(i, 0, mono_buffer.getNumSamples());
+    }
+    
     for (int sample = 0; sample < buffer.getNumSamples() ; ++sample){
         
+        // get the sample from the mono_buffer
+        float x = mono_buffer.getWritePointer(0)[sample];
         
         for (int channel = 0; channel < totalNumInputChannels ; ++channel){
-            float x = buffer.getWritePointer(channel)[sample];
             
-            x = panner.processSample(x,channel);
+            float y = panner.processSample(x,channel);
             
-            buffer.getWritePointer(channel)[sample] = x;
+            buffer.getWritePointer(channel)[sample] = y;
         }
     }
 }
