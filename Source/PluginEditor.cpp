@@ -75,6 +75,7 @@ PanimateAudioProcessorEditor::PanimateAudioProcessorEditor (PanimateAudioProcess
     rate.setSliderStyle(Slider::RotaryVerticalDrag);
     rate.setRange(0, 10000);
     rate.setValue(0);
+    rate.setSkewFactor(0.35);
     rate.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 50, 15);
     rate.setNumDecimalPlacesToDisplay(3);
     addAndMakeVisible(rate);
@@ -176,9 +177,9 @@ void PanimateAudioProcessorEditor::paint (Graphics& g)
     g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
 
     g.setColour (Colours::white);
-    g.setFont (15.0f);
+    g.setFont (30.0f);
     g.drawFittedText ("Panimate", getLocalBounds(), Justification::centredTop, 1);
-    g.drawFittedText("Panning visualization graphic to go here in later version...", getLocalBounds(), Justification::centred, 5);
+    g.drawFittedText("Graphic TBA...", getLocalBounds(), Justification::centred, 5);
 }
 
 void PanimateAudioProcessorEditor::resized()
@@ -233,6 +234,17 @@ void PanimateAudioProcessorEditor::sliderValueChanged(Slider *slider) {
     if (slider == &rate && tempoSynced == false) {
         rateValue = slider->getValue();
         processor.panner.setRate(rateValue);
+        
+        // dynamically change decimal place of value that is displayed
+        if (rateValue < 100.f){
+            slider->setNumDecimalPlacesToDisplay(3);
+        }
+        if (rateValue >= 100.f && rateValue < 1000.f){
+            slider->setNumDecimalPlacesToDisplay(2);
+        }
+        if  (rateValue >= 1000.f && rateValue < 10000.f){
+            slider->setNumDecimalPlacesToDisplay(0);
+        }
     }
     
     if (slider == &positionOffset) {
