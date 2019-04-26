@@ -48,6 +48,7 @@ public:
     
     void setLFOType(TypeLFO type);
     TypeLFO getLFOType();
+    float getPanPosition();
     
     
 private:
@@ -61,6 +62,7 @@ private:
     float positionOffset = 0.0f;
     
     float currentAngle = 0.0f;
+    float angleChange;
     
     bool tempoSynced = false;
     bool phaseInverted = false;
@@ -74,6 +76,7 @@ private:
     void updateAngle();
     float getNextSample();
     
+    float panPosition;
 };
 
 #endif /* Panner.h */
