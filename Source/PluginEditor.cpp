@@ -25,7 +25,7 @@ PanimateAudioProcessorEditor::PanimateAudioProcessorEditor (PanimateAudioProcess
     LFOtype.addListener(this);
     LFOtype.setBounds(25, 50, 200, 25);
     LFOtype.addItem("Sine", 1);
-    LFOtype.addItem("Square", 2);
+//    LFOtype.addItem("Square", 2);
     LFOtype.addItem("Triangle", 3);
     LFOtype.addItem("Sawtooth", 4);
     LFOtype.setSelectedId(1);
@@ -178,8 +178,8 @@ void PanimateAudioProcessorEditor::paint (Graphics& g)
 
     g.setColour (Colours::white);
     g.setFont (30.0f);
-    g.drawFittedText ("Panimate", getLocalBounds(), Justification::centredTop, 1);
-    g.drawFittedText("Graphic TBA...", getLocalBounds(), Justification::centred, 5);
+    g.drawFittedText ("Panimate", getLocalBounds(), Justification::centred, 1);
+//    g.drawFittedText("Graphic TBA...", getLocalBounds(), Justification::centred, 5);
 }
 
 void PanimateAudioProcessorEditor::resized()
