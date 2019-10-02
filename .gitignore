@@ -12,3 +12,11 @@ Builds/*
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# JUCE stuff #
+##############
+*.component
+
+# Misc Project Files #
+######################
+PanimateTest\ Project
